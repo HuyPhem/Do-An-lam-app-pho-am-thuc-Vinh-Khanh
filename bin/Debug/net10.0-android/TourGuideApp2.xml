@@ -1,0 +1,559 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TourGuideApp2</name>
+    </assembly>
+    <members>
+        <member name="T:TourGuideApp2.Data.CategoryRepository">
+            <summary>
+            Repository class for managing categories in the database.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.#ctor(Microsoft.Extensions.Logging.ILogger{TourGuideApp2.Data.CategoryRepository})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TourGuideApp2.Data.CategoryRepository"/> class.
+            </summary>
+            <param name="logger">The logger instance.</param>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.Init">
+            <summary>
+            Initializes the database connection and creates the Category table if it does not exist.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.ListAsync">
+            <summary>
+            Retrieves a list of all categories from the database.
+            </summary>
+            <returns>A list of <see cref="T:TourGuideApp2.Models.Category"/> objects.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.GetAsync(System.Int32)">
+            <summary>
+            Retrieves a specific category by its ID.
+            </summary>
+            <param name="id">The ID of the category.</param>
+            <returns>A <see cref="T:TourGuideApp2.Models.Category"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.SaveItemAsync(TourGuideApp2.Models.Category)">
+            <summary>
+            Saves a category to the database. If the category ID is 0, a new category is created; otherwise, the existing category is updated.
+            </summary>
+            <param name="item">The category to save.</param>
+            <returns>The ID of the saved category.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.DeleteItemAsync(TourGuideApp2.Models.Category)">
+            <summary>
+            Deletes a category from the database.
+            </summary>
+            <param name="item">The category to delete.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.CategoryRepository.DropTableAsync">
+            <summary>
+            Drops the Category table from the database.
+            </summary>
+        </member>
+        <member name="T:TourGuideApp2.Data.ProjectRepository">
+            <summary>
+            Repository class for managing projects in the database.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.#ctor(TourGuideApp2.Data.TaskRepository,TourGuideApp2.Data.TagRepository,Microsoft.Extensions.Logging.ILogger{TourGuideApp2.Data.ProjectRepository})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TourGuideApp2.Data.ProjectRepository"/> class.
+            </summary>
+            <param name="taskRepository">The task repository instance.</param>
+            <param name="tagRepository">The tag repository instance.</param>
+            <param name="logger">The logger instance.</param>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.Init">
+            <summary>
+            Initializes the database connection and creates the Project table if it does not exist.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.ListAsync">
+            <summary>
+            Retrieves a list of all projects from the database.
+            </summary>
+            <returns>A list of <see cref="T:TourGuideApp2.Models.Project"/> objects.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.GetAsync(System.Int32)">
+            <summary>
+            Retrieves a specific project by its ID.
+            </summary>
+            <param name="id">The ID of the project.</param>
+            <returns>A <see cref="T:TourGuideApp2.Models.Project"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.SaveItemAsync(TourGuideApp2.Models.Project)">
+            <summary>
+            Saves a project to the database. If the project ID is 0, a new project is created; otherwise, the existing project is updated.
+            </summary>
+            <param name="item">The project to save.</param>
+            <returns>The ID of the saved project.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.DeleteItemAsync(TourGuideApp2.Models.Project)">
+            <summary>
+            Deletes a project from the database.
+            </summary>
+            <param name="item">The project to delete.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.ProjectRepository.DropTableAsync">
+            <summary>
+            Drops the Project table from the database.
+            </summary>
+        </member>
+        <member name="T:TourGuideApp2.Data.TagRepository">
+            <summary>
+            Repository class for managing tags in the database.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.#ctor(Microsoft.Extensions.Logging.ILogger{TourGuideApp2.Data.TagRepository})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TourGuideApp2.Data.TagRepository"/> class.
+            </summary>
+            <param name="logger">The logger instance.</param>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.Init">
+            <summary>
+            Initializes the database connection and creates the Tag and ProjectsTags tables if they do not exist.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.ListAsync">
+            <summary>
+            Retrieves a list of all tags from the database.
+            </summary>
+            <returns>A list of <see cref="T:TourGuideApp2.Models.Tag"/> objects.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.ListAsync(System.Int32)">
+            <summary>
+            Retrieves a list of tags associated with a specific project.
+            </summary>
+            <param name="projectID">The ID of the project.</param>
+            <returns>A list of <see cref="T:TourGuideApp2.Models.Tag"/> objects.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.GetAsync(System.Int32)">
+            <summary>
+            Retrieves a specific tag by its ID.
+            </summary>
+            <param name="id">The ID of the tag.</param>
+            <returns>A <see cref="T:TourGuideApp2.Models.Tag"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.SaveItemAsync(TourGuideApp2.Models.Tag)">
+            <summary>
+            Saves a tag to the database. If the tag ID is 0, a new tag is created; otherwise, the existing tag is updated.
+            </summary>
+            <param name="item">The tag to save.</param>
+            <returns>The ID of the saved tag.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.SaveItemAsync(TourGuideApp2.Models.Tag,System.Int32)">
+            <summary>
+            Saves a tag to the database and associates it with a specific project.
+            </summary>
+            <param name="item">The tag to save.</param>
+            <param name="projectID">The ID of the project.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.IsAssociated(TourGuideApp2.Models.Tag,System.Int32)">
+            <summary>
+            Checks if a tag is already associated with a specific project.
+            </summary>
+            <param name="item">The tag to save.</param>
+            <param name="projectID">The ID of the project.</param>
+            <returns>If tag is already associated with this project</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.DeleteItemAsync(TourGuideApp2.Models.Tag)">
+            <summary>
+            Deletes a tag from the database.
+            </summary>
+            <param name="item">The tag to delete.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.DeleteItemAsync(TourGuideApp2.Models.Tag,System.Int32)">
+            <summary>
+            Deletes a tag from a specific project in the database.
+            </summary>
+            <param name="item">The tag to delete.</param>
+            <param name="projectID">The ID of the project.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TagRepository.DropTableAsync">
+            <summary>
+            Drops the Tag and ProjectsTags tables from the database.
+            </summary>
+        </member>
+        <member name="T:TourGuideApp2.Data.TaskRepository">
+            <summary>
+            Repository class for managing tasks in the database.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.#ctor(Microsoft.Extensions.Logging.ILogger{TourGuideApp2.Data.TaskRepository})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TourGuideApp2.Data.TaskRepository"/> class.
+            </summary>
+            <param name="logger">The logger instance.</param>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.Init">
+            <summary>
+            Initializes the database connection and creates the Task table if it does not exist.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.ListAsync">
+            <summary>
+            Retrieves a list of all tasks from the database.
+            </summary>
+            <returns>A list of <see cref="T:TourGuideApp2.Models.ProjectTask"/> objects.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.ListAsync(System.Int32)">
+            <summary>
+            Retrieves a list of tasks associated with a specific project.
+            </summary>
+            <param name="projectId">The ID of the project.</param>
+            <returns>A list of <see cref="T:TourGuideApp2.Models.ProjectTask"/> objects.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.GetAsync(System.Int32)">
+            <summary>
+            Retrieves a specific task by its ID.
+            </summary>
+            <param name="id">The ID of the task.</param>
+            <returns>A <see cref="T:TourGuideApp2.Models.ProjectTask"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.SaveItemAsync(TourGuideApp2.Models.ProjectTask)">
+            <summary>
+            Saves a task to the database. If the task ID is 0, a new task is created; otherwise, the existing task is updated.
+            </summary>
+            <param name="item">The task to save.</param>
+            <returns>The ID of the saved task.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.DeleteItemAsync(TourGuideApp2.Models.ProjectTask)">
+            <summary>
+            Deletes a task from the database.
+            </summary>
+            <param name="item">The task to delete.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:TourGuideApp2.Data.TaskRepository.DropTableAsync">
+            <summary>
+            Drops the Task table from the database.
+            </summary>
+        </member>
+        <member name="T:TourGuideApp2.PageModels.PlacesPageModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.PlacesPageModel.Places">
+            <inheritdoc cref="F:TourGuideApp2.PageModels.PlacesPageModel.places"/>
+        </member>
+        <member name="F:TourGuideApp2.PageModels.PlacesPageModel.goToDetailCommand">
+            <summary>The backing field for <see cref="P:TourGuideApp2.PageModels.PlacesPageModel.GoToDetailCommand"/>.</summary>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.PlacesPageModel.GoToDetailCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:TourGuideApp2.PageModels.PlacesPageModel.GoToDetail(TourGuideApp2.Models.Place)"/>.</summary>
+        </member>
+        <member name="T:TourGuideApp2.PageModels.ProjectListPageModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.ProjectListPageModel.Projects">
+            <inheritdoc cref="F:TourGuideApp2.PageModels.ProjectListPageModel._projects"/>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.ProjectListPageModel.SelectedProject">
+            <inheritdoc cref="F:TourGuideApp2.PageModels.ProjectListPageModel.selectedProject"/>
+        </member>
+        <member name="F:TourGuideApp2.PageModels.ProjectListPageModel.appearingCommand">
+            <summary>The backing field for <see cref="P:TourGuideApp2.PageModels.ProjectListPageModel.AppearingCommand"/>.</summary>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.ProjectListPageModel.AppearingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TourGuideApp2.PageModels.ProjectListPageModel.Appearing"/>.</summary>
+        </member>
+        <member name="F:TourGuideApp2.PageModels.ProjectListPageModel.navigateToProjectCommand">
+            <summary>The backing field for <see cref="P:TourGuideApp2.PageModels.ProjectListPageModel.NavigateToProjectCommand"/>.</summary>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.ProjectListPageModel.NavigateToProjectCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:TourGuideApp2.PageModels.ProjectListPageModel.NavigateToProject(TourGuideApp2.Models.Project)"/>.</summary>
+        </member>
+        <member name="F:TourGuideApp2.PageModels.ProjectListPageModel.addProjectCommand">
+            <summary>The backing field for <see cref="P:TourGuideApp2.PageModels.ProjectListPageModel.AddProjectCommand"/>.</summary>
+        </member>
+        <member name="P:TourGuideApp2.PageModels.ProjectListPageModel.AddProjectCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TourGuideApp2.PageModels.ProjectListPageModel.AddProject"/>.</summary>
+        </member>
+        <member name="T:TourGuideApp2.Services.IErrorHandler">
+            <summary>
+            Error Handler Service.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Services.IErrorHandler.HandleError(System.Exception)">
+            <summary>
+            Handle error in UI.
+            </summary>
+            <param name="ex">Exception being thrown.</param>
+        </member>
+        <member name="T:TourGuideApp2.Services.ModalErrorHandler">
+            <summary>
+            Modal Error Handler.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Services.ModalErrorHandler.HandleError(System.Exception)">
+            <summary>
+            Handle error in UI.
+            </summary>
+            <param name="ex">Exception.</param>
+        </member>
+        <member name="T:TourGuideApp2.Utilities.ProjectExtensions">
+            <summary>
+            Project Model Extensions
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Utilities.ProjectExtensions.IsNullOrNew(TourGuideApp2.Models.Project)">
+            <summary>
+            Check if the project is null or new.
+            </summary>
+            <param name="project"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TourGuideApp2.Utilities.TaskUtilities">
+            <summary>
+            Task Utilities.
+            </summary>
+        </member>
+        <member name="M:TourGuideApp2.Utilities.TaskUtilities.FireAndForgetSafeAsync(System.Threading.Tasks.Task,TourGuideApp2.Services.IErrorHandler)">
+            <summary>
+            Fire and Forget Safe Async.
+            </summary>
+            <param name="task">Task to Fire and Forget.</param>
+            <param name="handler">Error Handler.</param>
+        </member>
+        <member name="T:TourGuideApp2.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="P:JsonContext.Boolean">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.ListProject">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.ListProjectTask">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.ListTag">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.Category">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.Project">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.ProjectsJson">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.ProjectTask">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.Tag">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.Int32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.String">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:JsonContext.Default">
+            <summary>
+            The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
+            </summary>
+        </member>
+        <member name="P:JsonContext.GeneratedSerializerOptions">
+            <summary>
+            The source-generated options associated with this context.
+            </summary>
+        </member>
+        <member name="M:JsonContext.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:JsonContext.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:JsonContext.GetTypeInfo(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Button.TextColorTo(Microsoft.Maui.Controls.Button,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_DatePicker.TextColorTo(Microsoft.Maui.Controls.DatePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Editor.TextColorTo(Microsoft.Maui.Controls.Editor,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Entry.TextColorTo(Microsoft.Maui.Controls.Entry,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_InputView.TextColorTo(Microsoft.Maui.Controls.InputView,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Label.TextColorTo(Microsoft.Maui.Controls.Label,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Picker.TextColorTo(Microsoft.Maui.Controls.Picker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_RadioButton.TextColorTo(Microsoft.Maui.Controls.RadioButton,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_SearchBar.TextColorTo(Microsoft.Maui.Controls.SearchBar,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_TimePicker.TextColorTo(Microsoft.Maui.Controls.TimePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Places">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Places" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Projects">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Projects" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedProject">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedProject" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Places">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Places" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Projects">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Projects" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedProject">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedProject" generated properties.</summary>
+        </member>
+    </members>
+</doc>

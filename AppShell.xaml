@@ -1,0 +1,20 @@
+<Shell
+    x:Class="TourGuideApp2.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TourGuideApp2">
+
+    <TabBar>
+
+        <ShellContent Title="Khám phá"
+                      ContentTemplate="{DataTemplate local:MainPage}" />
+
+        <ShellContent Title="Bản đồ"
+                      ContentTemplate="{DataTemplate local:MapPage}" />
+
+        <ShellContent Title="Giới thiệu"
+                      ContentTemplate="{DataTemplate local:ProjectListPage}" />
+
+    </TabBar>
+
+</Shell>

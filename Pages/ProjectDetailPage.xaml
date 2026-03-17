@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TourGuideApp2.Pages.ProjectDetailPage"
+             Title="{Binding SelectedPlace.Name}">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="15">
+            <Image Source="{Binding SelectedPlace.ImageUrl}" HeightRequest="220" Aspect="AspectFill" />
+            <Label Text="{Binding SelectedPlace.Name}" FontSize="28" FontAttributes="Bold" TextColor="#FF6B35" />
+            <Label Text="{Binding SelectedPlace.Address}" FontSize="16" />
+            <Label Text="{Binding SelectedPlace.Specialty}" FontSize="18" TextColor="Orange" />
+            <Label Text="{Binding SelectedPlace.Description}" FontSize="14" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,69 @@
+﻿<ContentPage
+    x:Class="TourGuideApp2.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{StaticResource Background}">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label
+                Text="📍 Phố Ẩm Thực Vĩnh Khánh"
+                FontSize="28"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                TextColor="{StaticResource Primary}" />
+
+            <Label
+                Text="Ứng dụng thuyết minh tự động"
+                FontSize="18"
+                HorizontalOptions="Center"/>
+
+            <Label
+                Text="Khám phá thiên đường hải sản tại Quận 4, TP.HCM."
+                FontSize="16"/>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="1"
+                Padding="15">
+
+                <VerticalStackLayout>
+
+                    <Label
+                        Text="🦑 Ốc Đào"
+                        FontAttributes="Bold"
+                        FontSize="18"/>
+
+                    <Label
+                        Text="Quán ốc nổi tiếng nhất tại phố ẩm thực Vĩnh Khánh." />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="1"
+                Padding="15">
+
+                <VerticalStackLayout>
+
+                    <Label
+                        Text="🦐 Hải sản nướng"
+                        FontAttributes="Bold"
+                        FontSize="18"/>
+
+                    <Label
+                        Text="Nhiều quán hải sản tươi sống chế biến tại chỗ." />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

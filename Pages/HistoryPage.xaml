@@ -1,0 +1,30 @@
+<ContentPage
+    x:Class="TourGuideApp2.Pages.HistoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Giới thiệu">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label
+                Text="📖 Giới thiệu"
+                FontSize="26"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+
+            <Label
+                Text="Phố Ẩm Thực Vĩnh Khánh là một trong những khu phố ẩm thực nổi tiếng tại Quận 4, TP.HCM. Nơi đây tập trung hàng chục quán ốc và hải sản hấp dẫn thu hút du khách và người dân địa phương." />
+
+            <Button
+                Text="🔊 Nghe thuyết minh"
+                BackgroundColor="#E65100"
+                TextColor="White"
+                CornerRadius="20"/>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>
