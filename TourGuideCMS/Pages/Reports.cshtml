@@ -1,0 +1,16 @@
+@page
+@model TourGuideCMS.Pages.ReportsModel
+@{
+    ViewData["Title"] = "Lịch sử & Tour";
+}
+
+<h1>Lịch sử sử dụng & quản lý tour</h1>
+
+<div class="alert alert-info">
+    <strong>Gợi ý cho đồ án:</strong> Lượt nghe / thời gian trung bình hiện lưu <strong>trên điện thoại</strong> (file JSON trong app).
+    Bạn có thể: (1) demo bằng màn <strong>Lịch sử</strong> trên app, hoặc (2) sau này thêm API POST từ app lên server.
+</div>
+
+<p class="mb-2"><strong>Quản lý tour:</strong> nếu đề yêu cầu nhiều tuyến, có thể thêm bảng <code>Tour</code> + bảng nối <code>TourPlace</code> trong SQLite và mở rộng CMS — hiện tại app đi theo một khu (phố Vĩnh Khánh).</p>
+
+<p><a asp-page="/Index">← Về trang chủ</a></p>

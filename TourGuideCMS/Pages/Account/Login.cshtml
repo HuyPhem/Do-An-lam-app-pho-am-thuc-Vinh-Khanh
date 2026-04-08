@@ -1,0 +1,23 @@
+@page
+@model TourGuideCMS.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Đăng nhập Admin";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h2 class="mb-3">CMS — Phố ẩm thực Vĩnh Khánh</h2>
+        <p class="text-muted small">Quản lý POI / bản dịch / nội dung thuyết minh (SQLite giống app).</p>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" asp-for="Password" autocomplete="current-password" required />
+            </div>
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+@model TourGuideCMS.Models.PlaceFormViewModel
+
+<div class="row">
+    <div class="col-md-6 mb-2">
+        <label class="form-label">Tên POI *</label>
+        <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 mb-2">
+        <label class="form-label">Ưu tiên</label>
+        <input type="number" class="form-control" asp-for="Priority" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label class="form-label">Bán kính (m)</label>
+        <input type="number" step="0.1" class="form-control" asp-for="ActivationRadiusMeters" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-2">
+        <label class="form-label">Địa chỉ</label>
+        <input class="form-control" asp-for="Address" />
+    </div>
+    <div class="col-md-6 mb-2">
+        <label class="form-label">Đặc sản / ghi chú ngắn</label>
+        <input class="form-control" asp-for="Specialty" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-2">
+        <label class="form-label">URL ảnh minh họa</label>
+        <input class="form-control" asp-for="ImageUrl" placeholder="tên file trong package hoặc URL" />
+    </div>
+    <div class="col-md-6 mb-2">
+        <label class="form-label">Link bản đồ ngoài (MapUrl)</label>
+        <input class="form-control" asp-for="MapUrl" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-2">
+        <label class="form-label">Latitude</label>
+        <input type="number" step="any" class="form-control" asp-for="Latitude" />
+    </div>
+    <div class="col-md-4 mb-2">
+        <label class="form-label">Longitude</label>
+        <input type="number" step="any" class="form-control" asp-for="Longitude" />
+    </div>
+</div>
+<div class="mb-2">
+    <label class="form-label">Mô tả</label>
+    <textarea class="form-control" rows="3" asp-for="Description"></textarea>
+</div>
+<hr />
+<p class="text-muted small">Bản dịch / script TTS (app ưu tiên file audio theo POI; không có file thì đọc text)</p>
+<div class="mb-2">
+    <label class="form-label">Tiếng Việt</label>
+    <textarea class="form-control" rows="2" asp-for="VietnameseAudioText"></textarea>
+</div>
+<div class="mb-2">
+    <label class="form-label">English</label>
+    <textarea class="form-control" rows="2" asp-for="EnglishAudioText"></textarea>
+</div>
+<div class="mb-2">
+    <label class="form-label">中文</label>
+    <textarea class="form-control" rows="2" asp-for="ChineseAudioText"></textarea>
+</div>
+<div class="mb-2">
+    <label class="form-label">日本語</label>
+    <textarea class="form-control" rows="2" asp-for="JapaneseAudioText"></textarea>
+</div>

@@ -1,0 +1,33 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Trang chủ CMS";
+}
+
+<h1 class="mb-3">Quản trị nội dung — Vĩnh Khánh</h1>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">POI</h5>
+                <p class="display-6">@Model.PlaceCount</p>
+                <a class="btn btn-outline-primary" asp-page="/Places/Index">Quản lý danh sách</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">API cho app MAUI</h5>
+                <p class="small mb-1">Endpoint đọc POI (JSON):</p>
+                <code class="d-block mb-2 p-2 bg-light">GET @Request.Scheme://@Request.Host/api/places</code>
+                <p class="small text-muted mb-0">Trong app: cài <strong>Preferences</strong> URL API = địa chỉ trên (máy thật: IP LAN máy chạy web). File DB: <code class="small">@Model.DatabasePath</code></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a class="btn btn-link" asp-page="/Reports">Lịch sử / Tour — gợi ý</a>
+</div>

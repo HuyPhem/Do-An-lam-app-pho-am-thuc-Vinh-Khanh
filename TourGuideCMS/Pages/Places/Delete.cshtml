@@ -1,0 +1,19 @@
+@page "{id:int}"
+@model TourGuideCMS.Pages.Places.DeleteModel
+@{
+    ViewData["Title"] = "Xóa POI";
+}
+
+@if (Model.Place is null)
+{
+    <p>Không tìm thấy.</p>
+}
+else
+{
+    <h1>Xóa POI</h1>
+    <p>Bạn có chắc muốn xóa <strong>@Model.Place.Name</strong>?</p>
+    <form method="post">
+        <button type="submit" class="btn btn-danger">Xóa vĩnh viễn</button>
+        <a asp-page="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+}

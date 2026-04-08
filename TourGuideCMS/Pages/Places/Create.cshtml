@@ -1,0 +1,16 @@
+@page
+@model TourGuideCMS.Pages.Places.CreateModel
+@{
+    ViewData["Title"] = "Thêm POI";
+}
+
+<h1>Thêm POI</h1>
+<form method="post">
+    <partial name="_PlaceForm" model="Model.Input" />
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-page="Index" class="btn btn-secondary">Hủy</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

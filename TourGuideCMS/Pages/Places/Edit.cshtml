@@ -1,0 +1,17 @@
+@page "{id:int}"
+@model TourGuideCMS.Pages.Places.EditModel
+@{
+    ViewData["Title"] = "Sửa POI";
+}
+
+<h1>Sửa POI #@Model.Input.Id</h1>
+<form method="post">
+    <input type="hidden" asp-for="Input.Id" />
+    <partial name="_PlaceForm" model="Model.Input" />
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a asp-page="Index" class="btn btn-secondary">Hủy</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

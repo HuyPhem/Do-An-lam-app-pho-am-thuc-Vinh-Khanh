@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TourGuide CMS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-page="/Index">TourGuide CMS</a>
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-page="/Index">Trang chủ</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/Places/Index">POI</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/Reports">Lịch sử / Tour</a></li>
+                        }
+                    </ul>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form method="post" asp-page="/Account/Logout" class="d-inline">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Đăng xuất</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary btn-sm" asp-page="/Account/Login">Đăng nhập</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="border-top footer text-muted py-3">
+        <div class="container small">
+            CMS quản lý POI — đồng bộ file <code>VinhKhanh.db</code> với app MAUI.
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
