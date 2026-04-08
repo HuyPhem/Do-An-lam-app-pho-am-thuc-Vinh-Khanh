@@ -1,5 +1,7 @@
 using System.Text.Json;
-using TourGuideApp2.PageModels;   // Giữ nguyên namespace của bạn
+using Microsoft.Extensions.DependencyInjection;
+using TourGuideApp2.PageModels;
+using TourGuideApp2.Services;
 
 namespace TourGuideApp2.Pages;
 
@@ -7,6 +9,18 @@ public partial class HeatmapPage : ContentPage
 {
     private readonly HeatmapPageModel _viewModel;
     private bool _isMapReady = false;
+
+    /// <summary>Shell dùng DataTemplate không gọi DI — resolve từ MAUI service provider.</summary>
+    public HeatmapPage() : this(ResolveViewModel())
+    {
+    }
+
+    private static HeatmapPageModel ResolveViewModel()
+    {
+        if (Application.Current?.Handler?.MauiContext?.Services.GetService<HeatmapPageModel>() is { } vm)
+            return vm;
+        return new HeatmapPageModel(new SimulationService());
+    }
 
     public HeatmapPage(HeatmapPageModel viewModel)
     {

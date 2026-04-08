@@ -29,11 +29,29 @@ public static class PlaceApiService
     /// <summary>
     /// Trả về <c>null</c> khi chưa cấu hình URL, lỗi mạng, hoặc payload rỗng — caller nên đọc SQLite cục bộ (<c>VinhKhanh.db</c>).
     /// </summary>
+    public static string GetEffectiveApiUrl()
+    {
+        // Ưu tiên URL hard-code trong AppConfig để tránh kẹt Preferences cũ (thường là localhost).
+        var configUrl = AppConfig.DefaultPoiApiUrl.Trim();
+        if (!string.IsNullOrWhiteSpace(configUrl))
+            return configUrl;
+
+        var apiUrl = Preferences.Default.Get(PoiApiUrlPreferenceKey, string.Empty)?.Trim() ?? string.Empty;
+        if (apiUrl.Contains("localhost", StringComparison.OrdinalIgnoreCase) ||
+            apiUrl.Contains("127.0.0.1", StringComparison.OrdinalIgnoreCase))
+        {
+            return string.Empty;
+        }
+
+        return apiUrl;
+    }
+
+    public static bool HasRemoteApiConfigured()
+        => !string.IsNullOrWhiteSpace(GetEffectiveApiUrl());
+
     public static async Task<List<Place>?> TryGetRemotePlacesAsync()
     {
-        var apiUrl = Preferences.Default.Get(PoiApiUrlPreferenceKey, string.Empty)?.Trim();
-        if (string.IsNullOrWhiteSpace(apiUrl))
-            apiUrl = AppConfig.DefaultPoiApiUrl.Trim();
+        var apiUrl = GetEffectiveApiUrl();
         if (string.IsNullOrWhiteSpace(apiUrl))
             return null;
 

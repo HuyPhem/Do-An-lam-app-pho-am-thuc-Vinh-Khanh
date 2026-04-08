@@ -53,6 +53,16 @@ public partial class MapPage : ContentPage
     private double _lastQueuedGpsLat = double.NaN;
     private double _lastQueuedGpsLng = double.NaN;
     private const double GpsDuplicateEpsilonDegrees = 1e-7;
+    /// <summary>Chỉ nhận điểm GPS có độ chính xác chấp nhận được (m). Null/0 = không có metadata, vẫn cho qua.</summary>
+    private const double MaxGpsAccuracyMeters = 55;
+    /// <summary>Loại bỏ điểm nhảy bất thường trong khoảng thời gian ngắn (m/s).</summary>
+    private const double MaxGpsSpeedMetersPerSecond = 45;
+    /// <summary>Chỉ áp speed-filter khi quãng nhảy đủ lớn, tránh false-positive do nhiễu nhỏ.</summary>
+    private const double MinDistanceForSpeedFilterMeters = 90;
+    /// <summary>Cho phép "teleport" lớn khi test Fake GPS để không bị kẹt tại điểm cũ.</summary>
+    private const double AllowLargeJumpMeters = 280;
+    private DateTime? _lastAcceptedGpsUtc;
+    private string _currentZoneStatus = "Đang xác định vùng...";
     /// <summary>Sau khi bấm mũi tên / xe buýt, tạm không áp GPS để không đè vị trí giả lập.</summary>
     private DateTime? _gpsManualOverrideUntilUtc;
     private const int GpsManualOverrideSeconds = 60;
@@ -72,9 +82,43 @@ public partial class MapPage : ContentPage
     {
         var remote = await PlaceApiService.TryGetRemotePlacesAsync();
         if (remote is { Count: > 0 })
-            return remote;
+            return SanitizePlaces(remote);
 
-        return await LoadPlacesFromLocalDatabaseAsync();
+        if (PlaceApiService.HasRemoteApiConfigured())
+        {
+            UpdateGeoStatusLabel("Khong tai duoc API, dang dung du lieu cuc bo");
+        }
+
+        return SanitizePlaces(await LoadPlacesFromLocalDatabaseAsync());
+    }
+
+    private static List<Place> SanitizePlaces(List<Place> places)
+    {
+        foreach (var p in places)
+        {
+            if (p is null) continue;
+            p.VietnameseAudioText = CleanupNarrationNoise(p.VietnameseAudioText);
+            p.EnglishAudioText = CleanupNarrationNoise(p.EnglishAudioText);
+            p.ChineseAudioText = CleanupNarrationNoise(p.ChineseAudioText);
+            p.JapaneseAudioText = CleanupNarrationNoise(p.JapaneseAudioText);
+        }
+
+        return places;
+    }
+
+    /// <summary>Loại tiền tố số rác kiểu "7272727..." trước nội dung thuyết minh.</summary>
+    private static string CleanupNarrationNoise(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        var cleaned = Regex.Replace(
+            text.Trim(),
+            @"^\s*(?:\d[\d\s\-_.,;:\|]*){3,}",
+            string.Empty,
+            RegexOptions.CultureInvariant);
+
+        return cleaned.TrimStart();
     }
 
     private async Task<List<Place>> LoadPlacesFromLocalDatabaseAsync()
@@ -109,6 +153,9 @@ public partial class MapPage : ContentPage
         InitializeComponent();
         btnCurrentLang.Text = "🇻🇳 VI";
         langOptions.IsVisible = false;
+        lblGeoStatus.Text = "📍 Trạng thái: Đang xác định vùng...";
+        lblCooldownStatus.Text = "⏳ Cooldown: -";
+        lblLastPlayedStatus.Text = "🔊 Đã phát gần nhất: -";
     }
     // ── Mở/đóng thanh chọn ngôn ngữ ──
     private void OnLanguageButtonClicked(object? sender, EventArgs e)
@@ -149,9 +196,32 @@ public partial class MapPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _ = LoadMapAsync();
+        _ = SafeLoadMapAsync();
         _ = TryStartForegroundGpsListeningAsync();
         _ = PlayWelcomeMessageAsync();
+    }
+
+    private async Task SafeLoadMapAsync()
+    {
+        try
+        {
+            await LoadMapAsync();
+        }
+        catch (Exception ex)
+        {
+            mapView.Source = new HtmlWebViewSource
+            {
+                Html = $"""
+                <html>
+                  <body style="font-family:Arial,Helvetica,sans-serif;background:#fafafa;color:#222;padding:16px;">
+                    <h3>Khong tai duoc ban do</h3>
+                    <p>Vui long mo lai tab Ban do hoac khoi dong lai app.</p>
+                    <pre style="white-space:pre-wrap;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px;">{System.Net.WebUtility.HtmlEncode(ex.Message)}</pre>
+                  </body>
+                </html>
+                """
+            };
+        }
     }
 
     protected override void OnDisappearing()
@@ -730,6 +800,37 @@ for (var i = 0; i < pois.length; i++) {{
         }
     }
 
+    private async void OnResetDemoStateClicked(object? sender, EventArgs e)
+    {
+        try
+        {
+            CancelProximitySpeech();
+            CancelBusStopSpeech();
+
+            _activeProximityPoiIndex = -1;
+            _activeBusStopToken = null;
+            _autoGeoNextAllowedPlayUtcByPoi.Clear();
+            _autoGeoLastLogByPoi.Clear();
+            _lastQueuedGpsLat = double.NaN;
+            _lastQueuedGpsLng = double.NaN;
+            _lastAcceptedGpsUtc = null;
+
+            UpdateGeoStatusLabel("Đã reset demo - ngoài vùng POI");
+            UpdateCooldownLabel(-1);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                lblLastPlayedStatus.Text = "🔊 Đã phát gần nhất: -";
+            });
+
+            await mapView.EvaluateJavaScriptAsync("window.setNearestPoiHighlight && window.setNearestPoiHighlight(-1);");
+            await DisplayAlertAsync("Reset demo", "Đã reset trạng thái geofence/cooldown để test lại từ đầu.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Lỗi reset", $"Không thể reset trạng thái demo.\n{ex.Message}", "OK");
+        }
+    }
+
     private void PopulateQrPicker()
     {
         pickerPoiForQr.Items.Clear();
@@ -970,6 +1071,7 @@ for (var i = 0; i < pois.length; i++) {{
         try
         {
             var durationSeconds = await NarrationQueueService.EnqueuePoiOrTtsAsync(poiIndex, _selectedLanguage, text, ct);
+            UpdateLastPlayedLabel(place.Name, "BusStop");
             await HistoryLogService.AddAsync(place.Name, "BusStop", _selectedLanguage, durationSeconds);
         }
         catch (OperationCanceledException)
@@ -1208,6 +1310,7 @@ for (var i = 0; i < pois.length; i++) {{
             try
             {
                 var durationSeconds = await NarrationQueueService.EnqueuePoiOrTtsAsync(poiIndex, _selectedLanguage, text);
+                UpdateLastPlayedLabel(place.Name, "QR");
                 await HistoryLogService.AddAsync(place.Name, "QR", _selectedLanguage, durationSeconds);
             }
             catch (OperationCanceledException)
@@ -1427,6 +1530,7 @@ for (var i = 0; i < pois.length; i++) {{
             {
                 inBusStopZone = true;
                 nearStopPoiForHighlight = nearStopPoi;
+                UpdateGeoStatusLabel($"Trong vùng trạm {GetBusStopDisplayName(nearStopToken)}");
                 if (!string.Equals(_activeBusStopToken, nearStopToken, StringComparison.Ordinal))
                 {
                     _activeBusStopToken = nearStopToken;
@@ -1458,11 +1562,18 @@ for (var i = 0; i < pois.length; i++) {{
                     {
                         CancelProximitySpeech();
                         _activeProximityPoiIndex = -1;
+                        UpdateGeoStatusLabel("Ngoài vùng POI");
+                        UpdateCooldownLabel(-1);
+                    }
+                    else
+                    {
+                        UpdateGeoStatusLabel($"Đang trong vùng: {activePlace.Name}");
                     }
                 }
                 else
                 {
                     _activeProximityPoiIndex = -1;
+                    UpdateGeoStatusLabel("Ngoài vùng POI");
                 }
             }
 
@@ -1539,6 +1650,8 @@ for (var i = 0; i < pois.length; i++) {{
             }
             if (candidateIndex < 0)
             {
+                UpdateGeoStatusLabel("Ngoài vùng POI");
+                UpdateCooldownLabel(-1);
                 _ = UpdateNearestPoiHighlightAsync(nearestPoiForHighlight);
                 return;
             }
@@ -1571,12 +1684,15 @@ for (var i = 0; i < pois.length; i++) {{
 
             if (string.IsNullOrWhiteSpace(text))
             {
+                UpdateGeoStatusLabel($"Đang trong vùng: {nearestPlace.Name}");
                 _ = UpdateNearestPoiHighlightAsync(nearestPoiForHighlight);
                 return;
             }
 
             if (IsAutoGeoPlaybackDebounced(candidateIndex))
             {
+                UpdateGeoStatusLabel($"Đang trong vùng: {nearestPlace.Name}");
+                UpdateCooldownLabel(candidateIndex);
                 nearestPoiForHighlight = nearestIndex;
                 _ = UpdateNearestPoiHighlightAsync(nearestPoiForHighlight);
                 return;
@@ -1589,6 +1705,7 @@ for (var i = 0; i < pois.length; i++) {{
             textToSpeak = text;
             speakPoiIndex = candidateIndex;
             speakPlace = nearestPlace;
+            UpdateGeoStatusLabel($"Đang trong vùng: {nearestPlace.Name}");
             }
         }
         finally
@@ -1612,6 +1729,8 @@ for (var i = 0; i < pois.length; i++) {{
         {
             var durationSeconds = await NarrationQueueService.EnqueuePoiOrTtsAsync(speakPoiIndex, _selectedLanguage, textToSpeak, token);
             RegisterAutoGeoPlaybackCompleted(speakPoiIndex);
+            UpdateLastPlayedLabel(speakPlace.Name, "AutoGeo");
+            UpdateCooldownLabel(speakPoiIndex);
             if (ShouldLogAutoGeo(speakPoiIndex))
             {
                 await HistoryLogService.AddAsync(speakPlace.Name, "AutoGeo", _selectedLanguage, durationSeconds);
@@ -1672,6 +1791,40 @@ for (var i = 0; i < pois.length; i++) {{
     {
         if (poiIndex < 0) return;
         _autoGeoNextAllowedPlayUtcByPoi[poiIndex] = DateTime.UtcNow.AddSeconds(AutoGeoSpeechDebounceSeconds);
+    }
+
+    private void UpdateGeoStatusLabel(string status)
+    {
+        _currentZoneStatus = status;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            lblGeoStatus.Text = $"📍 Trạng thái: {_currentZoneStatus}";
+        });
+    }
+
+    private void UpdateLastPlayedLabel(string placeName, string source)
+    {
+        var now = DateTime.Now;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            lblLastPlayedStatus.Text = $"🔊 Đã phát gần nhất: {placeName} ({source}) lúc {now:HH:mm:ss}";
+        });
+    }
+
+    private void UpdateCooldownLabel(int poiIndex)
+    {
+        var text = "⏳ Cooldown: -";
+        if (poiIndex >= 0 && _autoGeoNextAllowedPlayUtcByPoi.TryGetValue(poiIndex, out var notBeforeUtc))
+        {
+            var remaining = notBeforeUtc - DateTime.UtcNow;
+            if (remaining.TotalSeconds > 0)
+                text = $"⏳ Cooldown: còn {Math.Ceiling(remaining.TotalSeconds)}s";
+        }
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            lblCooldownStatus.Text = text;
+        });
     }
 
     private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
@@ -1783,8 +1936,15 @@ for (var i = 0; i < pois.length; i++) {{
             Math.Abs(location.Longitude - _lastQueuedGpsLng) < GpsDuplicateEpsilonDegrees)
             return;
 
+        if (!IsGpsAccuracyAcceptable(location))
+            return;
+
+        if (IsGpsJumpLikelyInvalid(location))
+            return;
+
         _lastQueuedGpsLat = location.Latitude;
         _lastQueuedGpsLng = location.Longitude;
+        _lastAcceptedGpsUtc = DateTime.UtcNow;
 
         var lat = location.Latitude;
         var lng = location.Longitude;
@@ -1798,6 +1958,43 @@ for (var i = 0; i < pois.length; i++) {{
             await TrackRoutePointAsync("gps");
             await CheckProximityAndSpeakAsync();
         });
+    }
+
+    private static bool IsGpsAccuracyAcceptable(Location location)
+    {
+        var accuracy = location.Accuracy;
+        if (!accuracy.HasValue || accuracy.Value <= 0)
+            return true;
+        return accuracy.Value <= MaxGpsAccuracyMeters;
+    }
+
+    private bool IsGpsJumpLikelyInvalid(Location location)
+    {
+        if (double.IsNaN(_lastQueuedGpsLat) || double.IsNaN(_lastQueuedGpsLng))
+            return false;
+
+        if (!_lastAcceptedGpsUtc.HasValue)
+            return false;
+
+        var now = DateTime.UtcNow;
+        var dtSeconds = (now - _lastAcceptedGpsUtc.Value).TotalSeconds;
+        if (dtSeconds <= 0.35)
+            return false;
+
+        var distanceMeters = CalculateDistance(_lastQueuedGpsLat, _lastQueuedGpsLng, location.Latitude, location.Longitude);
+        if (distanceMeters < MinDistanceForSpeedFilterMeters)
+            return false;
+
+        // Fake GPS thường đổi vị trí theo kiểu "nhảy cụm"; nếu chặn sẽ bị kéo ngược/đứng yên sai.
+        if (distanceMeters >= AllowLargeJumpMeters)
+            return false;
+
+        // Điểm có accuracy tốt thì ưu tiên tin cậy hơn speed check.
+        if (location.Accuracy.HasValue && location.Accuracy.Value > 0 && location.Accuracy.Value <= 18)
+            return false;
+
+        var speedMps = distanceMeters / dtSeconds;
+        return speedMps > MaxGpsSpeedMetersPerSecond;
     }
 
 #if ANDROID
@@ -2046,6 +2243,7 @@ for (var i = 0; i < pois.length; i++) {{
             CancelProximitySpeech();
             CancelBusStopSpeech();
             var durationSeconds = await NarrationQueueService.EnqueuePoiOrTtsAsync(id, lang, text ?? "");
+            UpdateLastPlayedLabel(place.Name, "Map");
             await HistoryLogService.AddAsync(place.Name, "Map", lang, durationSeconds);
         }
         catch { }

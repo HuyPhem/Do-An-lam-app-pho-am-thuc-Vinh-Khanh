@@ -23,6 +23,10 @@
                       Route="history"
                       ContentTemplate="{DataTemplate pages:HistoryPage}" />
 
+        <ShellContent Title="Heatmap"
+                      Route="heatmap"
+                      ContentTemplate="{DataTemplate pages:HeatmapPage}" />
+
     </TabBar>
 
 </Shell>

@@ -27,6 +27,34 @@
                 TextColor="White" />
         </Border>
 
+        <Border
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Margin="12,64,12,0"
+            Padding="10,8"
+            BackgroundColor="#CCFFFFFF"
+            StrokeShape="RoundRectangle 12"
+            ZIndex="11">
+            <VerticalStackLayout Spacing="2">
+                <Label
+                    x:Name="lblGeoStatus"
+                    Text="📍 Trạng thái: Đang xác định vùng..."
+                    FontSize="12"
+                    FontAttributes="Bold"
+                    TextColor="#263238" />
+                <Label
+                    x:Name="lblCooldownStatus"
+                    Text="⏳ Cooldown: -"
+                    FontSize="11"
+                    TextColor="#455A64" />
+                <Label
+                    x:Name="lblLastPlayedStatus"
+                    Text="🔊 Đã phát gần nhất: -"
+                    FontSize="11"
+                    TextColor="#455A64" />
+            </VerticalStackLayout>
+        </Border>
+
         <!-- Thanh điều khiển giả lập di chuyển - góc dưới trái -->
         <Border 
            HorizontalOptions="Start"
@@ -55,6 +83,15 @@
                     FontSize="12"
                     CornerRadius="12"
                     BackgroundColor="#607D8B"
+                    TextColor="White" />
+                <Button
+                    Text="♻️ Reset demo"
+                    Clicked="OnResetDemoStateClicked"
+                    WidthRequest="132"
+                    HeightRequest="42"
+                    FontSize="12"
+                    CornerRadius="12"
+                    BackgroundColor="#455A64"
                     TextColor="White" />
 
                 <!-- Ở trong phòng: GPS/Fake GPS trên máy thường không đưa được chấm tới quán. Chọn quán = đặt mốc đúng tọa độ quán trong DB (mô phỏng đứng gần đó). -->

@@ -6,6 +6,6 @@ namespace TourGuideApp2;
 /// </summary>
 public static class AppConfig
 {
-    public const string DefaultPoiApiUrl = "";
+    public const string DefaultPoiApiUrl = "http://192.168.1.101:5095/api/places";
     public const string DefaultPoiApiKey = "";
 }

@@ -28,6 +28,7 @@ public partial class AppShell : Shell
             normalizedTarget.Contains("//map") ||
             normalizedTarget.Contains("//intro") ||
             normalizedTarget.Contains("//history") ||
+            normalizedTarget.Contains("//heatmap") ||
             normalizedTarget.Contains("//qrdemo");
 
         if (!isRestrictedTab)
